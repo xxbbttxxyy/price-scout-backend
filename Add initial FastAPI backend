@@ -1,0 +1,35 @@
+from fastapi import FastAPI, UploadFile, File
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+# Allow frontend (Vercel) to talk to backend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/")
+def health_check():
+    return {"status": "Price Scout backend running"}
+
+@app.post("/analyze")
+async def analyze_product(
+    image: UploadFile = File(...),
+    cost: float = 0
+):
+    # Placeholder logic (we replace this with AI next)
+    product_name = "Unknown product"
+    market_price = 100
+
+    profit = market_price - cost
+
+    return {
+        "product": product_name,
+        "market_price": market_price,
+        "your_cost": cost,
+        "estimated_profit": profit
+    }
